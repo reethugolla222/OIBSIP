@@ -1,0 +1,148 @@
+package onlineReservation;
+
+import java.util.HashMap;
+import java.util.Scanner;
+
+class OnlineReservation {
+    private static HashMap<String, String> customer = new HashMap<>();
+    private static HashMap<String, DetailsReservation> reservations = new HashMap<>();
+    
+     static Scanner scanner = new Scanner(System.in);
+
+    static {
+        
+        customer.put("preuser1", "pass1");
+        customer.put("preuser2", "password2");
+        customer.put("preuser3", "password3");
+    }
+
+   
+    private static boolean login() {
+        System.out.print("Enter your  username-: ");
+        String username = scanner.nextLine();
+        System.out.print("Enter your password-: ");
+        String password = scanner.nextLine();
+
+        if (customer.containsKey(username) && customer.get(username).equals(password)) {
+            System.out.println("!Login successfull!");
+            return true;
+        } else {
+            System.out.println("you entered Invalid username or password.");
+            return false;
+        }
+    }
+
+    private static void makeYourReservation() {
+        System.out.println("\n--- Make Reservation ---");
+        System.out.print("Enter the  passenger name: ");
+        String passengerName = scanner.nextLine();
+        System.out.print("Enter the train number: ");
+        String trainNumber = scanner.nextLine();
+        System.out.print("Enter the class type: ");
+        String classType = scanner.nextLine();
+        System.out.print("Enter the date of journey in  (DD/MM/YYYY) format: ");
+        String date = scanner.nextLine();
+        System.out.print("Enter the from place: ");
+        String from = scanner.nextLine();
+        System.out.print("Enter the  destination place: ");
+        String destination = scanner.nextLine();
+
+        String pnr = generatePNR();
+        DetailsReservation reservation = new DetailsReservation(passengerName, trainNumber, classType, date, from, destination);
+        reservations.put(pnr, reservation);
+
+        System.out.println("\n your Reservation successful!");
+        System.out.println("Your PNR number is: " + pnr);
+        System.out.println(reservation);
+    }
+
+    private static void cancelYourReservation() {
+        System.out.println("\n--- Cancel The Reservation ---");
+        System.out.print("Enter the PNR number: ");
+        String pnr = scanner.nextLine();
+
+        if (reservations.containsKey(pnr)) {
+            System.out.println("\n your Reservation details:");
+            System.out.println(reservations.get(pnr));
+            System.out.print("Confirm your  cancellation [yes/no]: ");
+            String confirmation = scanner.nextLine();
+
+            if (confirmation.equalsIgnoreCase("yes")) {
+                reservations.remove(pnr);
+                System.out.println(" your Reservation cancelled successfully.");
+            } else {
+                System.out.println("Cancellation aborted.");
+            }
+        } else {
+            System.out.println(" you entered Invalid PNR number.");
+        }
+    }
+
+    private static String generatePNR() {
+        return "PNR" + (reservations.size() + 1);
+    }
+    
+    public static void main(String[] args) {
+        System.out.println(" !!Welcome to Online Reservation System!!");
+
+        if (login()) {
+            boolean running = true;
+            while (running) {
+                System.out.println("\n1. Make the Reservation\n2. Cancel the Reservation\n3. Exit");
+                System.out.print("Choose any of the  mentioned option: ");
+                int yourChoice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+
+                switch (yourChoice) {
+                    case 1:
+                        makeYourReservation();
+                        break;
+                    case 2:
+                        cancelYourReservation();
+                        break;
+                    case 3:
+                        running = false;
+                        break;
+                    default:
+                        System.out.println("you Entered the Invalid option!. Please try again.");
+                }
+            }
+        }
+        System.out.println("!!Thank you for using  Online Reservation System!! ");
+    }
+
+}
+
+
+............................................................................
+
+package onlineReservation;
+
+public class DetailsReservation {
+	 private String name;
+	    private String theTrainNumber;
+	    private String classType;
+	    private String date;
+	    private String from;
+	    private String destination;
+	
+	
+
+	    public DetailsReservation(String name, String trainNumber, String classType, String date, String from, String destination) {
+	        this.name = name;
+	        this.theTrainNumber = trainNumber;
+	        this.classType = classType;
+	        this.date = date;
+	        this.from = from;
+	        this.destination = destination;
+	    }
+
+	    @Override
+	    public String toString() {
+	        return "Name: " + name + "\nTrain Number: " + theTrainNumber + "\nClass: " + classType +
+	                "\nDate: " + date + "\nFrom: " + from + "\nDestination: " + destination;
+	    }
+	  
+
+}
+
